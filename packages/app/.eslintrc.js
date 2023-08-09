@@ -12,6 +12,7 @@ module.exports = {
   plugins: ['custom-rule'],
   rules: {
     'custom-rule/my-rule': 'error',
-    'custom-rule/my-other-rule': 'error'
+    'custom-rule/my-other-rule': 'error',
+    'custom-rule/expect-expect': 'error'
   },
 };
