@@ -1,10 +1,19 @@
-const foo = () => {}
+import {it} from 'vitest'
 
-const bar = () => {}
+const foo = () => {
+}
 
-const fooBar = () => {}
+const bar = () => {
+}
+
+const fooBar = () => {
+}
 
 
 foo()
 bar()
 fooBar()
+
+it('should fail', () => {
+  console.log("I should fail due to vitest/expect-expect");
+})
