@@ -100,7 +100,7 @@ const isTemplateLiteral = <V extends string>(
   return (
     node.type === AST_NODE_TYPES.TemplateLiteral &&
     node.quasis.length === 1 &&
-    (value === undefined || node.quasis[0].value.raw === value)
+    (value === undefined || node.quasis[0]?.value.raw === value)
   )
 }
 
@@ -160,26 +160,26 @@ export const replaceAccessorFixer = (
   )
 }
 
-export const removeExtraArgumentsFixer = (
-  fixer: TSESLint.RuleFixer,
-  context: TSESLint.RuleContext<string, unknown[]>,
-  func: TSESTree.CallExpression,
-  from: number
-): TSESLint.RuleFix => {
-  const firstArg = func.arguments[from]
-  const lastArg = func.arguments[func.arguments.length - 1]
-
-  const sourceCode = context.getSourceCode()
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  let tokenAfterLastParam = sourceCode.getTokenAfter(lastArg)!
-
-  if (tokenAfterLastParam.value === ',')
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    tokenAfterLastParam = sourceCode.getTokenAfter(tokenAfterLastParam)!
-
-  return fixer.removeRange([firstArg.range[0], tokenAfterLastParam.range[0]])
-}
+// export const removeExtraArgumentsFixer = (
+//   fixer: TSESLint.RuleFixer,
+//   context: TSESLint.RuleContext<string, unknown[]>,
+//   func: TSESTree.CallExpression,
+//   from: number
+// ): TSESLint.RuleFix => {
+//   const firstArg = func.arguments[from]
+//   const lastArg = func.arguments[func.arguments.length - 1]
+//
+//   const sourceCode = context.getSourceCode()
+//
+//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//   let tokenAfterLastParam = sourceCode.getTokenAfter(lastArg)!
+//
+//   if (tokenAfterLastParam.value === ',')
+//     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//     tokenAfterLastParam = sourceCode.getTokenAfter(tokenAfterLastParam)!
+//
+//   return fixer.removeRange([firstArg.range[0], tokenAfterLastParam.range[0]])
+// }
 
 interface CalledKnownMemberExpression<Name extends string = string>
   extends KnownMemberExpression<Name> {
@@ -195,9 +195,13 @@ export const isParsedInstanceOfMatcherCall = (
   expectFnCall: ParsedExpectVitestFnCall,
   classArg?: string
 ) => {
-  return (
-    getAccessorValue(expectFnCall.matcher) === 'toBeInstanceOf' &&
-    expectFnCall.args.length === 1 &&
-    isSupportedAccessor(expectFnCall.args[0], classArg)
-  )
+  if (expectFnCall.args[0]) {
+    return (
+      getAccessorValue(expectFnCall.matcher) === 'toBeInstanceOf' &&
+      expectFnCall.args.length === 1 &&
+      isSupportedAccessor(expectFnCall.args[0], classArg)
+    )
+  } else {
+    return null;
+  }
 }

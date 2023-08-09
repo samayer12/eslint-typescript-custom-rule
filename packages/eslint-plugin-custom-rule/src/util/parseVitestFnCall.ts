@@ -218,6 +218,7 @@ const findModifiersAndMatcher = (
 			if (name !== ModifierName.not)
 				return 'modifier-unknown'
 
+			// @ts-ignore
 			const firstModifier = getAccessorValue(modifiers[0])
 
 			// and the first modifier has to be either "resolves" or "rejects"
@@ -285,6 +286,7 @@ const parseVistestFnCallWithReasonInner = (
 
 	const [first, ...rest] = chain
 
+	// @ts-ignore
 	const lastLink = getAccessorValue(chain[chain.length - 1])
 
 	if (lastLink === 'each') {
@@ -296,6 +298,7 @@ const parseVistestFnCallWithReasonInner = (
 	if (node.callee.type === AST_NODE_TYPES.TaggedTemplateExpression && lastLink !== 'each')
 		return null
 
+	// @ts-ignore
 	const resolved = resolveVitestFn(context, getAccessorValue(first))
 
 	if (!resolved)
@@ -310,7 +313,7 @@ const parseVistestFnCallWithReasonInner = (
 
 	const parsedVitestFnCall: Omit<ParsedVitestFnCall, 'type'> = {
 		name,
-		head: {...resolved, node: first},
+		head: {...resolved, node: first as AccessorNode},
 		members: rest as KnownMemberExpressionProperty[]
 	}
 
@@ -423,6 +426,7 @@ export const resolveScope = (
 		if (ref && ref.defs.length > 0) {
 			const def = ref.defs[ref.defs.length - 1]
 
+			// @ts-ignore
 			const importDetails = describePossibleImportDef(def)
 
 			if (importDetails?.local === identifier)
@@ -539,9 +543,10 @@ export const getFirstMatcherArg = (
 ): TSESTree.SpreadElement | TSESTree.Expression => {
 	const [firstArg] = expectFnCall.args
 
-	if (firstArg.type === AST_NODE_TYPES.SpreadElement)
+	if (firstArg?.type === AST_NODE_TYPES.SpreadElement)
 		return firstArg
 
+	// @ts-ignore
 	return followTypeAssertionChain(firstArg)
 }
 
