@@ -1,23 +1,22 @@
-import { RuleTester } from '@typescript-eslint/rule-tester';
+import {ruleTester} from "./util/test";
 
-import myRule from './myRule';
+import myOtherRule from './myOtherRule';
 
-const parserResolver = require.resolve('@typescript-eslint/parser');
 
-const ruleTester = new RuleTester({
-  parser: parserResolver as any, // yarn 2+ shenanigans
-});
-
-ruleTester.run('my-rule', myRule, {
-  valid: ['notFooBar()', 'const foo = 2', 'const bar = 2'],
+ruleTester.run('my-rule', myOtherRule, {
+  valid: ['notFooBar()', 'aReallyLongToken()', 'shosho()'],
   invalid: [
     {
+      code: 'a()',
+      errors: [{messageId: 'messageIdForTooShort'}],
+    },
+    {
       code: 'foo()',
-      errors: [{ messageId: 'messageIdForSomeFailure' }],
+      errors: [{messageId: 'messageIdForTooShort'}],
     },
     {
       code: 'bar()',
-      errors: [{ messageId: 'messageIdForSomeOtherFailure' }],
+      errors: [{messageId: 'messageIdForTooShort'}],
     },
   ],
 });
