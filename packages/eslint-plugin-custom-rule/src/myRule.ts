@@ -1,6 +1,7 @@
-import { TSESLint, AST_NODE_TYPES } from '@typescript-eslint/utils';
+import {AST_NODE_TYPES, TSESLint} from '@typescript-eslint/utils';
 
-type MessageIds = 'messageIdForSomeFailure' | 'messageIdForSomeOtherFailure';
+type MessageIds = 'messageIdForSomeFailure'
+  | 'messageIdForSomeOtherFailure'
 
 const myRule: TSESLint.RuleModule<MessageIds> = {
   defaultOptions: [],

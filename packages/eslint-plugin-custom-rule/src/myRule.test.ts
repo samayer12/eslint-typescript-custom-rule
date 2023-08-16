@@ -1,22 +1,18 @@
 import {ruleTester} from "./util/test";
 
-import myOtherRule from './myOtherRule';
+import myRule from './myRule'
 
-
-ruleTester.run('my-rule', myOtherRule, {
-  valid: ['notFooBar()', 'aReallyLongToken()', 'shosho()'],
+ruleTester.run('my-rule', myRule, {
+  valid: ['notFooBar()', 'aReallyLongToken()', 'shosho()',
+  ],
   invalid: [
     {
-      code: 'a()',
-      errors: [{messageId: 'messageIdForTooShort'}],
-    },
-    {
       code: 'foo()',
-      errors: [{messageId: 'messageIdForTooShort'}],
+      errors: [{messageId: 'messageIdForSomeFailure'}],
     },
     {
       code: 'bar()',
-      errors: [{messageId: 'messageIdForTooShort'}],
+      errors: [{messageId: 'messageIdForSomeOtherFailure'}],
     },
   ],
 });
