@@ -10,6 +10,7 @@ function matchesAssertFunctionName(
 	nodeName: string,
 	patterns: readonly string[]
 ): boolean {
+	console.log("Checking: " + patterns)
 	return patterns.some(p =>
 		new RegExp(
 			`^${p
@@ -78,7 +79,7 @@ const expectExpectRule: TSESLint.RuleModule<MessageIds, Options> = {
 					if (node.callee.type === AST_NODE_TYPES.MemberExpression &&
 						isSupportedAccessor(node.callee.property, 'todo')) return
 					unchecked.push(node)
-				} else if (matchesAssertFunctionName(name, ['expect'])) {
+				} else if (matchesAssertFunctionName(name, ['expect', customExpression.toString()])) {
 					checkCallExpressionUsed(context, unchecked, context.getAncestors())
 				}
 			},
