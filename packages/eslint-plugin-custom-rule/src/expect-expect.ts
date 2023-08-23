@@ -4,7 +4,7 @@ import {getNodeName, isSupportedAccessor} from './util'
 
 export const RULE_NAME = 'expect-expect'
 export type MessageIds = 'expectedExpect';
-
+type Options = [{ 'custom-expression': string }]
 
 function matchesAssertFunctionName(
 	nodeName: string,
@@ -13,13 +13,13 @@ function matchesAssertFunctionName(
 	return patterns.some(p =>
 		new RegExp(
 			`^${p
-				.split('.')
-				.map(x => {
-					if (x === '**') return '[a-z\\d\\.]*'
+        .split('.')
+        .map(x => {
+          if (x === '**') return '[a-z\\d\\.]*'
 
-					return x.replace(/\*/gu, '[a-z\\d]*')
-				})
-				.join('\\.')}(\\.|$)`,
+          return x.replace(/\*/gu, '[a-z\\d]*')
+        })
+        .join('\\.')}(\\.|$)`,
 			'ui'
 		).test(nodeName)
 	)
@@ -45,19 +45,31 @@ function checkCallExpressionUsed(context: any, unchecked: TSESTree.CallExpressio
 }
 
 
-const expectExpectRule: TSESLint.RuleModule<MessageIds> = {
-	defaultOptions: [],
+const expectExpectRule: TSESLint.RuleModule<MessageIds, Options> = {
+	defaultOptions: [{'custom-expression': ''}],
 	meta: {
 		type: 'suggestion',
 		messages: {
 			expectedExpect: 'Use \'expect\' in test body'
 		},
-		schema: [],
+		schema: [
+			{
+				type: 'object',
+				properties: {
+					'custom-expression': {
+						type: 'string'
+					}
+				},
+				additionalProperties: false
+			}
+		],
 	},
 	create: (context) => {
 
 		const unchecked: TSESTree.CallExpression[] = []
-
+		const customExpression = context.options.map(option => option['custom-expression'].toString());
+		console.log("Received: " + customExpression)
+		console.log(typeof customExpression.toString())
 		return {
 			CallExpression(node) {
 				const name = getNodeName(node) ?? ''
