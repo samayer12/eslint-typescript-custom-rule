@@ -8,6 +8,9 @@ ruleTester.run('my-option-rule', myOptionRule, {
     {
       code: 'foo()',
       errors: [{messageId: 'messageIdForOption'}],
+      options: [
+        {max: 5}
+      ],
     },
   ],
 });
