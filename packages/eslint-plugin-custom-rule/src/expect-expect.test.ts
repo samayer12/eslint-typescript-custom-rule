@@ -9,7 +9,14 @@ ruleTester.run('expect-expect', expectExpectRule, {
     {
       code: 'test("shows success", () => {expectValue(true).toBe(false);});',
       options: [
-        {'custom-expression': 'expectValue'}
+        {'custom-expressions': ['expectValue']}
+      ]
+    },
+    {
+      code: 'test("shows success", () => {' +
+        'mySecondExpression(true).toBe(true);});',
+      options: [
+        {'custom-expressions': ['expectValue', 'mySecondExpression']}
       ]
     },
   ],
